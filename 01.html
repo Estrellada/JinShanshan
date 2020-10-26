@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style>
+		pre {
+			font-size: 20px;
+		}
+	</style>
+</head>
+</head>
+
+<body>
+
+
+	<pre>
+	1.function
+函数是由事件驱动的或者当它被调用时执行的可重复使用的代码块。
+	2.JavaScript 函数语法
+函数就是包裹在花括号中的代码块，前面使用了关键词 function：
+function functionName()
+
+执行代码
+}
+当调用该函数时，会执行函数内的代码。
+可以在某事件发生时直接调用函数（比如当用户点击按钮时），并且可由 JavaScript 在任何位置进行调用。
+JavaScript 对大小写敏感。关键词 function 必须是小写的，并且必须以与函数名称相同的大小写来调用函数。
+	3.函数的声明方式
+function  fn(){}
+var fn = function(){} //必须是先声明， 后调用
+var fn = new Function("a","b","return a+b");//前两个参数是形参,最后一个是函数体
+	使用Function构造函数(不推荐,理解)
+	var fn3=new Function("num1","num2","return num1+num2");//前两个参数是形参,最后一个是函数体
+	var sum=fn3(1,2);
+	console.log("sum:",sum);
+	4.函数的属性和方法
+函数的属性
+    JS中的函数是对象，因此函数也有属性和方法。
+    每个函数都包含两个属性：length和prototype。
+    其中，length属性表示函数希望接收参数的个数。
+   length 返回声明函数时传递的参数个数；与实际调用时传递的参数个数无关；
+	5.arguments
+在函数内部，有两个特殊的对象：arguments和this
+arguments是一个数组对象，包含传入函数中的所有参数，
+主要用途是保存函数参数，但这个对象还有一个名叫callee的属性，
+该属性是一个指针，指向拥有这个arguments对象的函数。
+	6.函数递归 	在函数内部调用函数本身的函数；
+程序调用自身的编程技巧称为递归（ recursion）。
+一个过程或函数在其定义或说明中有直接或间接调用自身的一种方法，
+它通常把一个大型复杂的问题层层转化为一个与原问题相似的规模较小的问题来求解，
+递归策略只需少量的程序就可描述出解题过程所需要的多次重复计算，大大地减少了程序的代码量。
+递归的能力在于用有限的语句来定义对象的无限集合。
+一般来说，递归需要有边界条件、递归前进段和递归返回段。
+当边界条件不满足时，递归前进；当边界条件满足时，递归返回。
+函数递归过程中，如果函数名不改变是没有问题的，但一旦改变函数名，内部的自身调用需要逐一修改。
+为了解决这个问题，我们可以使用arguments.callee来代替。
+	function box(num){
+        if(num&lt;=1){
+            return 1;
+        } else {
+            return num*arguments.callee(num-1);//使用callee来执行自身
+        }
+    }
+    7.apply()和call() 每个函数都包含这两个方法。
+     这两个方法的用途都是在特定的作用域中调用函数，实际上等于设置函数体内this对象的值。
+
+call()方法与apply()方法相同，他们的区别仅仅在于接收参数的方式不同。
+call与apply的第一个参数都是需要用到的函数对象，在函数体内第一个参数就是this的值，
+剩余的参数是需要传递给函数的值，call与apply的不同就是call传的值可以是任意的，
+而apply传的值必须为数组。
+     事实上，传递参数并不是apply()和call()方法真正的用武之地：
+     它们经常使用的地方是能够扩展函数赖以运行的作用域。
+     
+     都是用来更改函数内部的this指针；
+     
+它们各自的定义：
+apply：应用某一对象的一个方法，用另一个对象替换当前对象。
+例如：B.apply(A, arguments);即A对象应用B对象的方法。
+
+call：调用一个对象的一个方法，以另一个对象替换当前对象。
+例如：B.call(A, args1,args2);即A对象调用B对象的方法。   
+
+//////////////////////////////////////////////////////////////////////
+apply、call、bind比较
+那么 apply、call、bind 三者相比较，之间又有什么异同呢？
+何时使用 apply、call，何时使用 bind 呢。简单的一个栗子：
+
+var obj = {
+    x: 81,
+};
+ 
+var foo = {
+    getX: function() {
+        return this.x;
+    }
+}
+ 
+console.log(foo.getX.bind(obj)());  //81
+console.log(foo.getX.call(obj));    //81
+console.log(foo.getX.apply(obj));   //81
+三个输出的都是81，但是注意看使用 bind() 方法的，他后面多了对括号。
+
+也就是说，区别是，当你希望改变上下文环境之后并非立即执行，而是回调执行的时候，
+使用 bind() 方法。而 apply/call 则会立即执行函数。
+
+再总结一下：
+
+apply 、 call 、bind 三者都是用来改变函数的this对象的指向的；
+apply 、 call 、bind 三者第一个参数都是this要指向的对象，也就是想指定的上下文；
+apply 、 call 、bind 三者都可以利用后续参数传参；
+bind 是返回对应函数，便于稍后调用；apply 、call 则是立即调用 。
+//////////////////////////////////////////////////////////////////////
+
+		function add2(a,b){
+			console.log(a+b,this);
+		}
+		function sub(a,b){
+			console.log(a-b,this);
+		}
+		
+		add2(2,1);
+		sub(2,1);
+		//call
+		add2.call(sub,3,1);//add2.call(sub,3,1)==add2(3,1);
+		add2.apply(sub,[3,1]);
+		add2.bind(sub)(3,1);
+		--------------------------------
+		var foo={
+			name:"wangDong",
+			logName:function(){
+				console.log(this.name);
+			}
+		}
+		var bar={
+			name:"xiaoMing",
+		}
+		foo.logName();
+		foo.logName.call(bar);
+		foo.logName.apply(bar);
+     7.回调函数
+JS中的函数名本身就是变量，所以函数也可以作为值来使用。
+也就是说，不仅可以像传递参数一样把一个函数传递给另一个函数，
+而且可以将一个函数作为另一个函数的结果返回。
+	在一个函数中   另一个函数作为值被外层函数返回出来   那么此函数为作为值的函数
+	
+	“函数a有一个参数，这个参数是个函数b，当函数a执行完以后执行函数b。那么这个过程就叫回调。”，
+这句话的意思是函数b以一个参数的形式传入函数a并执行，
+顺序是先执行a ，然后执行参数b,b就是所谓的回调函数
+将函数A传递给函数B,并由B来执行A时，A就成了一个回调函数。
+	function fn(a, b, callBack) {
+		var c = a + b;
+		callBack(c);
+	}
+	function sum(num) {
+		console.log("-----", num*num);
+	}
+	fn(1, 2, sum);
+	
+	数组去重并排序
+	function fun1(arr,callBack){
+		//console.log(arr,callBack);
+		//数组去重
+		var newArr=noRepeat(arr);
+		//console.log(newArr);
+		return callBack(newArr);
+	}
+	
+	//数组去重
+	function noRepeat(arr){
+		//console.log(arr);
+		var newArr=[];
+		for(var i=0,le=arr.length;i&lt;le;i++){
+			if(newArr.indexOf(arr[i])&lt;0){
+				newArr.push(arr[i]);
+			}
+		}
+		return newArr;
+	}
+	
+	//数组排序
+	function mySort(arr){
+		arr.sort(function(a,b){
+			return a-b;
+		})
+		//console.log(arr);
+		return arr;
+	}
+	8.作为值的函数
+	通过return返回的函数名的函数就是作为值的函数；
+	function fn() {
+		var a = 10;
+		var b = 20;
+		function fn2() {
+			console.log("a+b=", a+b);
+		}
+		return fn2;
+	}
+	var f = fn(); //第一次调用  拿到fn2这个函数了
+	console.log(f()); //第二次调用才是执行fn2这个函数
+	9.函数的返回值
+任何函数都可以通过 return语句跟后面的要返回的值来实现返回值。
+我们还可以把函数的返回值赋给一个变量，然后通过变量进行操作。
+return语句还有一个功能就是退出当前函数，注意和break的区别。
+		function foo(){
+			var a=10;
+			return function(){
+				a *=2;
+				return a;
+			};
+		}
+		var f=foo();
+		console.log("f:",f);
+		console.log("f():",f());
+    10.this
+函数内部另一个特殊对象是this , this引用的是函数调用时所处的作用域。
+当在全局作用域中调用函数时，this对象引用的就是window.
+ 
+ 当函数作为对象的方法调用时，this指的是拥有此方法的这个对象
+在绑定的事件中   this指向触发此事件的元素   白话就是：谁调用此函数   this指向谁；
+
+在对象的方法中   this指向该对象；
+在对象函数内部再次声明一个函数时   内部函数中的this指向window；
+
+var obj={
+	name:"王东",
+	say:function(){
+		console.log("this:",this,this.name,fn());
+		function fn(){
+			console.log("fn中this:",this,"name:",self.name);//this指window
+			return self.name;
+		}
+}
+obj.say();
+	
+		10.prototype属性
+	对于prototype属性，它是保存所有实例方法的真正所在，也就是原型。
+实例对象的方法一般保存在prototype当中
+
+prototype 属性允许您向对象添加属性和方法
+注意： Prototype 是全局属性，适用于所有的Javascript对象。
+		function Person(name){
+			console.log("this:",this);
+			this.name=name;
+		}
+		Person.prototype={
+			speak:function(){
+				console.log("我是"+this.name);
+			},
+			work:function(){
+				console.log("我就是我，不一样的烟火");
+			}
+		}
+		var zs=new Person("zhangSan");
+		zs.speak();
+		zs.work();
+		-----------------------
+		var arr2=[1,2,3,4,3,2,1,5,5];
+		Array.prototype.noRepeat=function(){
+			//console.log(this);
+			var arr=[];
+			for(var i=0,le=this.length;i&lt;le;i++){
+				if(arr.indexOf(this[i])&lt;0){
+					arr.push(this[i]);
+				}
+			}
+			return arr;
+		}
+		//先将noRepeat()方法添加到Array,之后才可以再调用
+		console.log(arr2.noRepeat());
+		</pre>
+</body>
+<script>
+
+</script>
+
+</html>
